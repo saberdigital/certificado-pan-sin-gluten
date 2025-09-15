@@ -1,161 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Certificado - Pan Sin Gluten</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificado de Conclusión</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      width: 400px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      padding: 40px;
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f6f0;
+      color: #333;
       text-align: center;
-      border: 1px solid #e0e0e0;
-    }
-    .logo {
-      font-size: 32px;
-      color: #003399;
-      margin-bottom: 15px;
+      padding: 40px;
     }
     h1 {
-      margin: 0;
-      font-size: 28px;
-      color: #003399;
-      font-weight: bold;
+      color: #222;
+      margin-bottom: 20px;
     }
-    p {
-      margin: 15px 0;
-      color: #333;
-      font-size: 16px;
+    .form-group {
+      margin: 20px 0;
     }
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 15px 0;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      font-family: 'Segoe UI', sans-serif;
-      box-sizing: border-box;
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
-      width: 100%;
-      padding: 14px;
-      font-size: 18px;
-      background: #007bff;
+      background-color: #d4af37;
       color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      font-weight: bold;
-      font-family: 'Segoe UI', sans-serif;
-      transition: background 0.3s;
+      font-size: 16px;
     }
     button:hover {
-      background: #0056b3;
+      background-color: #b8860b;
     }
-    .footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    /* Estilo do certificado */
-    #certificado {
-      display: none;
-      width: 21cm;
-      height: 14.8cm;
-      margin: 40px auto;
-      background: #fff url('fundo-certificado.png') no-repeat center;
-      background-size: cover;
-      text-align: center;
-      position: relative;
-      padding: 40px;
-      box-sizing: border-box;
-    }
-
-    #certificado h1 {
-      font-size: 28px;
-      color: #003399;
-      margin-bottom: 10px;
-    }
-    #certificado p {
-      font-size: 18px;
-      margin: 8px 0;
-    }
-    #nomeCertificado {
-      font-size: 22px;
-      font-weight: bold;
-      margin-top: 20px;
+    .preview {
+      margin-top: 30px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">🎓</div>
-    <h1>Certificado</h1>
-    <p>Ingresá tu nombre completo para generar y descargar tu certificado:</p>
-    <input type="text" id="nome" placeholder="Nombre completo">
-    <button onclick="gerarCertificado()">Generar y Descargar Ahora</button>
-    <div class="footer">© 2025 Chef. Alicia Duarte | Curso de Pan Sin Gluten</div>
+  <h1>Descarga tu Certificado</h1>
+  <p>Ingresa tu nombre para generar el certificado.</p>
+
+  <div class="form-group">
+    <input type="text" id="nombre" placeholder="Tu nombre completo" required />
   </div>
 
-  <div id="certificado">
-    <h1>CERTIFICADO DE CONCLUSIÓN</h1>
-    <p>Otorgado a:</p>
-    <p id="nomeCertificado"></p>
-    <p>Por haber concluido satisfactoriamente el curso de PAN SIN GLÚTEN</p>
-    <p>Duración: 30 horas</p>
-    <p>Fecha de emisión: <span id="dataCertificado"></span></p>
-    <p style="margin-top:40px;">______________________________<br>Chef Alicia Duarte<br>CEO Creado y Enseñado</p>
-    <p>______________________________<br>Juan Sánchez<br>Director</p>
-  </div>
+  <button onclick="generarCertificado()">Generar y Descargar</button>
+
+  <div class="preview" id="preview"></div>
 
   <script>
-    function gerarCertificado() {
-      const nome = document.getElementById('nome').value;
-      if (!nome) {
+    function generarCertificado() {
+      const nombre = document.getElementById("nombre").value.trim();
+      if (!nombre) {
         alert("Por favor, ingresa tu nombre.");
         return;
       }
 
-      document.getElementById('nomeCertificado').innerText = nome;
+      // Criar documento PDF
+      const doc = new jspdf.jsPDF();
 
-      const hoje = new Date();
-      const dataFormatada = hoje.toLocaleDateString('es-ES');
-      document.getElementById('dataCertificado').innerText = dataFormatada;
+      // Configurar tamaño del papel A4
+      doc.setFillColor(249, 246, 240);
+      doc.rect(0, 0, 210, 297, 'F'); // Fondo beige
 
-      const certificado = document.getElementById('certificado');
-      certificado.style.display = 'block';
+      // Imagen de fondo (debe estar en el repositorio)
+      const img = new Image();
+      img.onload = function () {
+        doc.addImage(img, 'JPEG', 0, 0, 210, 297);
 
-      html2canvas(certificado).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('landscape', 'pt', 'a4');
+        // Título
+        doc.setFontSize(36);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Certificado', 75, 50);
+        doc.setFontSize(18);
+        doc.text('de conclusión', 85, 70);
 
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        // Linha decorativa
+        doc.setDrawColor(0, 0, 0);
+        doc.line(50, 80, 160, 80);
 
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`Certificado-${nome}.pdf`);
+        // Para El/La Estudiante
+        doc.setFontSize(16);
+        doc.text('Para El/La Estudiante', 75, 100);
 
-        certificado.style.display = 'none';
-      });
+        // Línea para nome
+        doc.setDrawColor(0, 0, 0);
+        doc.line(50, 130, 160, 130);
+
+        // Nombre
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text(nombre, 75, 130);
+
+        // Curso
+        doc.setFontSize(12);
+        doc.text('Conclusión del curso Pan Sin Gluten', 75, 160);
+
+        // Firmas
+        doc.setFontSize(14);
+        doc.text('Alicia Duarte', 20, 200);
+        doc.text('Chef Alicia Duarte', 20, 215);
+        doc.text('CEO Creado y Enseñado', 20, 230);
+
+        doc.text('Juan Sánchez', 150, 200);
+        doc.text('Diretor', 150, 215);
+
+        // Medal
+        doc.addImage('medal.png', 'PNG', 95, 180, 20, 20); // Se você tiver a medalha como PNG
+
+        // Salvar PDF
+        doc.save(`Certificado_${nombre.replace(/\s+/g, '_')}.pdf`);
+      };
+      img.src = 'fondo.jpg'; // Substitua pelo nome da imagem do fundo
     }
   </script>
 </body>
