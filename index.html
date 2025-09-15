@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certificado</title>
+  <!-- Bibliotecas para gerar PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
@@ -149,31 +150,30 @@
       // Mostrar o certificado
       document.getElementById('certificate').style.display = 'block';
 
-      // Gerar PDF
+      // Gerar PDF após breve delay (para renderizar)
       setTimeout(() => {
         generatePDF();
-      }, 100);
+      }, 500);
     }
 
     function generatePDF() {
       const certificate = document.getElementById('certificate');
-      const options = {
+
+      // Carregar jsPDF corretamente (versão UMD)
+      const { jsPDF } = window.jspdf;
+
+      html2canvas(certificate, {
         scale: 2,
         useCORS: true,
         logging: false
-      };
-
-      html2canvas(certificate, options).then(canvas => {
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jspdf.jsPDF('l', 'mm', 'a4'); // 'l' = landscape, 'a4'
-        const imgWidth = 210; // Largura do A4 em mm
-        const pageHeight = 297; // Altura do A4 em mm
+        const pdf = new jsPDF('l', 'mm', 'a4'); // Paisagem, A4
+        const imgWidth = 297; // Largura da página A4 em paisagem
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let heightLeft = imgHeight;
 
-        const position = 0;
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        pdf.save(`certificado-${document.getElementById('nameInput').value}.pdf`);
+        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`certificado-${document.getElementById('nameInput').value.replace(/\s+/g, '_')}.pdf`);
       });
     }
   </script>
