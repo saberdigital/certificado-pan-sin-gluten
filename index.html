@@ -93,22 +93,11 @@
     /* Data de emissão */
     .data {
       position: absolute;
-      bottom: 60px;
+      bottom: 40px; /* Mais abaixo */
       left: 50%;
       transform: translateX(-50%);
       font-size: 16px;
       color: #000;
-    }
-
-    /* Linha decorativa */
-    .linha {
-      position: absolute;
-      bottom: 90px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70%;
-      height: 1px;
-      background: #000;
     }
   </style>
 </head>
@@ -123,11 +112,10 @@
     <div class="footer">© 2025 Chef. Alicia Duarte | Curso de Pan Sin Glúten</div>
   </div>
 
-  <!-- Certificado com fundo completo (já com todos os textos fixos) -->
+  <!-- Certificado com fundo completo -->
   <div id="certificado">
     <div class="nome" id="nomeExibido">[NOMBRE]</div>
     <div class="data" id="dataExibida">Fecha de emisión: [FECHA]</div>
-    <div class="linha"></div>
   </div>
 
   <script>
@@ -152,10 +140,10 @@
       // Mostrar certificado
       document.getElementById('certificado').style.display = 'block';
 
-      // Gerar PDF após 500ms (garantir renderização)
+      // Gerar PDF com melhor qualidade
       setTimeout(() => {
         const elemento = document.getElementById('certificado');
-        html2canvas(elemento, { scale: 2 }).then(canvas => {
+        html2canvas(elemento, { scale: 3 }).then(canvas => {
           const imgData = canvas.toDataURL('image/png');
           const pdf = new window.jspdf.jsPDF({
             orientation: 'landscape',
