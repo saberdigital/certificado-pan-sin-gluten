@@ -119,7 +119,7 @@
 
     .student-name {
       position: absolute;
-      top: 62%; /* ← Posição ajustada para ficar entre as linhas */
+      top: 60%; /* ← Posição ajustada para ficar entre as linhas */
       left: 50%;
       transform: translate(-50%, -50%);
       font-family: 'Georgia', serif;
@@ -147,7 +147,7 @@
     <div class="form-section">
       <h1 class="title">Certificado</h1>
       <p>Digite o nome completo do aluno para gerar o certificado personalizado:</p>
-      <input type="text" id="nameInput" placeholder="Ex: André Luiz Baldin" oninput="updatePreview()" />
+      <input type="text" id="nameInput" placeholder="Su nombre aquí" oninput="updatePreview()" />
       <button onclick="generateCertificate()">
         📥 Gerar e Baixar Certificado Agora
       </button>
@@ -160,14 +160,14 @@
     <div class="preview-section">
       <h3 style="margin-bottom: 15px; color: #555;">Pré-visualização do Certificado</h3>
       <div class="certificate-container" id="certificate">
-        <div class="student-name" id="studentName">[Nome aparecerá aqui]</div>
+        <div class="student-name" id="studentName">[Su Nombre]</div>
       </div>
     </div>
   </div>
 
   <script>
     function updatePreview() {
-      const name = document.getElementById('nameInput').value.trim() || '[Nome aparecerá aqui]';
+      const name = document.getElementById('nameInput').value.trim() || '[Su nombre aparecerá aquí]';
       document.getElementById('studentName').textContent = name;
     }
 
