@@ -38,25 +38,17 @@
     button:hover {
       background-color: #b8860b;
     }
-    .preview {
-      margin-top: 30px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
   </style>
 </head>
 <body>
   <h1>Descarga tu Certificado</h1>
-  <p>Ingresa tu nombre para generar el certificado.</p>
+  <p>Ingresá tu nombre para generar el certificado.</p>
 
   <div class="form-group">
     <input type="text" id="nombre" placeholder="Tu nombre completo" required />
   </div>
 
   <button onclick="generarCertificado()">Generar y Descargar</button>
-
-  <div class="preview" id="preview"></div>
 
   <script>
     function generarCertificado() {
@@ -69,16 +61,17 @@
       // Criar documento PDF
       const doc = new jspdf.jsPDF();
 
-      // Configurar tamaño del papel A4
-      doc.setFillColor(249, 246, 240);
-      doc.rect(0, 0, 210, 297, 'F'); // Fondo beige
+      // Definir tamanho A4 (210x297 mm)
+      const imgWidth = 210;
+      const imgHeight = 297;
 
-      // Imagen de fondo (debe estar en el repositorio)
+      // Carregar imagem de fundo
       const img = new Image();
       img.onload = function () {
-        doc.addImage(img, 'JPEG', 0, 0, 210, 297);
+        // Adicionar imagem de fundo
+        doc.addImage(img, 'JPEG', 0, 0, imgWidth, imgHeight);
 
-        // Título
+        // Título principal
         doc.setFontSize(36);
         doc.setTextColor(0, 0, 0);
         doc.text('Certificado', 75, 50);
@@ -97,7 +90,7 @@
         doc.setDrawColor(0, 0, 0);
         doc.line(50, 130, 160, 130);
 
-        // Nombre
+        // Nome do estudante
         doc.setFontSize(16);
         doc.setTextColor(0, 0, 0);
         doc.text(nombre, 75, 130);
@@ -115,13 +108,16 @@
         doc.text('Juan Sánchez', 150, 200);
         doc.text('Diretor', 150, 215);
 
-        // Medal
-        doc.addImage('medal.png', 'PNG', 95, 180, 20, 20); // Se você tiver a medalha como PNG
+        // Medal (opcional)
+        const medal = new Image();
+        medal.onload = function () {
+          doc.addImage(medal, 'PNG', 95, 180, 20, 20);
+          doc.save(`Certificado_${nombre.replace(/\s+/g, '_')}.pdf`);
+        };
+        medal.src = 'medal.png'; // Substitua pelo nome real do arquivo
 
-        // Salvar PDF
-        doc.save(`Certificado_${nombre.replace(/\s+/g, '_')}.pdf`);
       };
-      img.src = 'fondo.jpg'; // Substitua pelo nome da imagem do fundo
+      img.src = 'fondo.jpg'; // Substitua pelo nome real do arquivo
     }
   </script>
 </body>
